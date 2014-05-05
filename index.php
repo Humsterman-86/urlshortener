@@ -1,7 +1,7 @@
 <?php
 
 include('config.php');
-require_once 'myurl.php';
+require_once 'lib/MyUrl.php';
 
 $getUrl = $_GET['url'];
 
