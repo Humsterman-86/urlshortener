@@ -5,8 +5,8 @@ require_once 'myurl.php';
 
 $url = new myurl();
 //redirect to real link if URL is set
-if (!empty($_REQUEST['url'])) {
-    $url->redirect($_REQUEST['url']);
+if (!empty($_GET['url'])) {
+    $url->redirect($_GET['url']);
 }
 
 var_dump($_REQUEST);
@@ -15,9 +15,9 @@ if ($_POST['url']) {
     $short = $url->shortGeneration();
 
     $query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$_POST['url'].'"');
-    if($query == FALSE)
+    if(!$query)
             {
-            $newUrl = $url->insertNewUrl($_POST['url']);
+            $newUrl = $url->insertNewUrl($_POST['url'], $short, $_SERVER['REMOTE_ADDR']);
             $url->redirectNewLink($newUrl);
             }
     else

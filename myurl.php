@@ -14,15 +14,15 @@ class myurl {
         return $short;
     }
 
-    function insertNewUrl($url) {
+    function insertNewUrl($url, $short_url, $server) {
         mysql_query("INSERT INTO urls (url_link, url_short, url_ip, url_date) VALUES
 	(
             '".addslashes($url)."',
-            '".$short."',
-            '".$_SERVER['REMOTE_ADDR']."',
+            '".$short_url."',
+            '".$server."',
             '".time()."'
 	)
-        ");
+        ") or die (mysql_error());
     }
     
     function redirectNewLink($link) {
