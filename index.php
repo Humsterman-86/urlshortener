@@ -4,18 +4,20 @@ include('config.php');
 require_once 'myurl.php';
 
 $nurl = new myurl();
-if (!empty($_GET['url'])) {
-    $nurl->redirect($_GET['url']);
+$postUrl = $_POST['url'];
+$getUrl = $_GET['url'];
+
+if (!empty($getUrl)) {
+    $nurl->redirect($getUrl);
+    $nurl->addHint($getUrl);
 }
 
-$postUrl = $_POST['url'];
 if ($_POST['url']) {
 
     $query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$postUrl.'"');
 
     if(mysql_num_rows($query) == 0)
             {
-            $count = mysql_num_rows($query);
             $short = $nurl->shortGeneration();
             $nurl->insertNewUrl($postUrl, $short, $_SERVER['REMOTE_ADDR']);
             $nurl->redirectNewLink($short);

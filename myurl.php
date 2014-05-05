@@ -31,5 +31,9 @@ class myurl {
 	    return header('Location: '.$redirect); die;
     }
     
+    function addHint($short_url) {
+        
+    }
+    
     }
 ?>
