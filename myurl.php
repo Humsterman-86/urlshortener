@@ -3,37 +3,54 @@ class existingUrl {
     public $link;
     public function __construct($url) {
         $this->link = $url;
-        $this->redirect($url);
+        $this->redirect($this->link);
     }
     function redirect ($link) {
 	$redirect = mysql_fetch_assoc(mysql_query("SELECT url_link FROM urls WHERE url_short = '".addslashes($link)."'"));
-	$redirect = "http://".str_replace("http://","",$redirect['url_link']);
-	header('HTTP/1.1 301 Moved Permanently');  
+        $redirect = "http://".str_replace("http://","",$redirect['url_link']);
+        header('HTTP/1.1 301 Moved Permanently');  
 	header("Location: ".$redirect);  
-    } 
+    }
+   
+    function addHit($link_id) {
+//        $link_id = $;
+        $urlId =mysql_query("INSERT INTO url_stats (hit_url, hit_ip, hit_date) VALUES
+	(
+            '".$link_id."',
+            '".$_SERVER['REMOTE_ADDR']."',
+            '".time()."'
+	)
+        ") or die (mysql_error());
+    }
+
 }
 
 class newUrl {
     public $link;
     public $short;
+    public $query;
     public function __construct($url) {
         $this->link = $url;
+        $this->query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$this->link.'"');
         $this->checkUrl();
     }    
 
     function checkUrl() {
-        $query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$this->link.'"');
-        if(mysql_num_rows($query) == 0)
+        if(mysql_num_rows($this->query) == 0)
             {
             $this->newRecord();
             }
-    else
+        else
             {
-            $sql_url = mysql_fetch_assoc($query);
-            $short_url = $sql_url['url_short'];
-            $this->redirectNewLink($short_url);
+            $path = $this->checkSqlRec();
+            $this->redirectNewLink($path);
             }
 
+    }
+    
+    function checkSqlRec() {
+        $sql_url = mysql_fetch_assoc($this->query);
+        return ($sql_url['url_short']);
     }
     
     function newRecord() {
@@ -62,10 +79,6 @@ class newUrl {
     function redirectNewLink($link) {
             $redirect = "?s=$link";
 	    return header('Location: '.$redirect); die;
-    }
-    
-    function addHint($short_url) {
-        
     }
     
     }
