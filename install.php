@@ -9,7 +9,8 @@ mysql_query("CREATE TABLE IF NOT EXISTS `urls` (
   `url_date` int(10) default NULL,
   `url_ip` varchar(255) default NULL,
   `url_hits` int(11) default '0',
-  PRIMARY KEY  (`url_id`)
+  PRIMARY KEY  (`url_id`),
+  UNIQUE KEY `url_short` (`url_short`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 echo "Main table created!";
 echo "Createing stats table";

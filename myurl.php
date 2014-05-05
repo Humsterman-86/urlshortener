@@ -15,13 +15,7 @@ class existingUrl {
     }
    
     function addHit($link_id) {
-        $urlId =mysql_query("INSERT INTO url_stats (hit_url, hit_ip, hit_date) VALUES
-	(
-            '".$link_id."',
-            '".$_SERVER['REMOTE_ADDR']."',
-            '".time()."'
-	)
-        ") or die (mysql_error());
+        while (!mysql_query("INSERT INTO url_stats (hit_url, hit_ip, hit_date) VALUES ('".$link_id."','".$_SERVER['REMOTE_ADDR']."','".time()."')")) {};
     }
 
 }
