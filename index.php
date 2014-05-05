@@ -3,28 +3,29 @@
 include('config.php');
 require_once 'myurl.php';
 
-$url = new myurl();
-//redirect to real link if URL is set
+$nurl = new myurl();
 if (!empty($_GET['url'])) {
-    $url->redirect($_GET['url']);
+    $nurl->redirect($_GET['url']);
 }
 
-var_dump($_REQUEST);
+//var_dump($_REQUEST);
 //insert new url
+$postUrl = $_POST['url'];
 if ($_POST['url']) {
-    $short = $url->shortGeneration();
+    $short = $nurl->shortGeneration();
 
-    $query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$_POST['url'].'"');
+    $query = mysql_query('SELECT url_short FROM urls WHERE url_link ="'.$postUrl.'"');
+
     if(!$query)
             {
-            $newUrl = $url->insertNewUrl($_POST['url'], $short, $_SERVER['REMOTE_ADDR']);
-            $url->redirectNewLink($newUrl);
+            $nurl->insertNewUrl($postUrl, $short, $_SERVER['REMOTE_ADDR']);
+            $nurl->redirectNewLink($short);
             }
     else
             {
             $sql_url = mysql_fetch_assoc($query);
             $short_url = $sql_url['url_short'];
-            $url->redirectNewLink($short_url);
+            $nurl->redirectNewLink($short_url);
             }
 }
  require('template/template.php'); 

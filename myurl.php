@@ -23,6 +23,7 @@ class myurl {
             '".time()."'
 	)
         ") or die (mysql_error());
+        return 1;
     }
     
     function redirectNewLink($link) {
